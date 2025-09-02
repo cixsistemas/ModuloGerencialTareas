@@ -1,0 +1,10 @@
+﻿
+https://www.adictosaltrabajo.com/2010/02/22/expresiones-cron/
+
+//«Segundos» «Minutos» «Horas» «Día del mes» «Mes» «Día de la semana» «Año»
+
+//CREAR IMAGEN GIF
+https://es.bloggif.com/
+
+//DESCARGAR ICONOS
+https://www.flaticon.es
