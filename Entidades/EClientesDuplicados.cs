@@ -9,6 +9,7 @@ namespace Entidades
     public class EClientesDuplicados
     {
         public string DNI { get; set; }
-        
-    }
+        public string Nombre { get; set; }
+
+	}
 }
