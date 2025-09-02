@@ -80,6 +80,7 @@
     <Compile Include="Utilitarios\CsEnvioCorreo.cs" />
     <Compile Include="Utilitarios\CsUtilitarios.cs" />
     <Compile Include="Utilitarios\Job.cs" />
+    <Compile Include="Utilitarios\MailHelper.cs" />
     <Compile Include="Utilitarios\Scheduler.cs" />
     <EmbeddedResource Include="FrmEmail.resx">
       <DependentUpon>FrmEmail.cs</DependentUpon>

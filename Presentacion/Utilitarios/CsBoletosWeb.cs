@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entidades;
+﻿using Entidades;
 using Logica;
+using System.Collections.Generic;
 
 namespace Presentacion.Utilitarios
 {

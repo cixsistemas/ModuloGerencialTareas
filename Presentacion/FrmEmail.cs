@@ -1,79 +1,59 @@
-﻿using Presentacion.Utilitarios;
+﻿using Presentacion.Utilitarios;  // Aquí están las clases utilitarias, como Scheduler y Jobs
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Presentacion
 {
-    public partial class FrmEmail : Form
-    {
-        public FrmEmail()
-        {
-            InitializeComponent();
-            //dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            //dateTimePicker1.CustomFormat = "dd/MM/yyyy hh:mm:ss";
-            //dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            //dateTimePicker1.CustomFormat = "MM/dd/yyyy hh:mm:ss";
-            //Ejecutar();
-        }
-        CsBoletosWeb _CsBoletosWeb = new CsBoletosWeb();
-        private void FrmEmail_Load(object sender, EventArgs e)
-        {
-            //UBICAR FORMULARIO EN ESQUINA SUPERIOR DERECHA
-            Screen scr = Screen.FromPoint(Location);
-            Location = new Point(scr.WorkingArea.Right - Width, scr.WorkingArea.Top);
-            //=================================================
+	public partial class FrmEmail : Form
+	{
+	
+		public FrmEmail()
+		{
+			InitializeComponent(); // Inicializa los componentes del formulario (botones, controles, etc.)
+		}
 
-            //OCULTAR FORMULARIO EN BARRA DE TAREAS
-            this.ShowInTaskbar = false;
-            //=================================================
-            //BtnEjecutar_Click(sender, e);
+		// Evento que se ejecuta al cargar el formulario
+		private void FrmEmail_Load(object sender, EventArgs e)
+		{
+			// === UBICAR FORMULARIO EN ESQUINA SUPERIOR DERECHA ===
+			Screen scr = Screen.FromPoint(Location);
+			Location = new Point(scr.WorkingArea.Right - Width, scr.WorkingArea.Top);
+			// Esto mueve la ventana a la esquina superior derecha de la pantalla
 
-            //EJECUTAR PROGRAMADOR AL CARGAR FORMULARIO
-            Ejecutar();
-            //button1_Click(sender, e);
-            //=================================================
-            //MessageBox.Show(dateTimePicker1.Value.ToString());
-        }
+			// === OCULTAR FORMULARIO EN BARRA DE TAREAS ===
+			this.ShowInTaskbar = false;
+			// El formulario no aparecerá en la barra de tareas, quedará "oculto"
 
-        private void FrmEmail_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //Impedir que el formulario se cierre pulsando X o Alt + F4
-            switch (e.CloseReason)
-            {
-                case CloseReason.UserClosing:
-                    e.Cancel = true;
-                    break;
-            }
-        }
+			// === EJECUTAR PROGRAMADOR AL CARGAR FORMULARIO ===
+			Ejecutar(); // Llama al programador (Quartz Scheduler) apenas carga el form
+		}
 
-        private void BtnEjecutar_Click(object sender, EventArgs e)
-        {
-            //_CsBoletosWeb.ListaBoletosAnuladosWebJob();
-            ////_Job.ListaBoletosAnuladosWebJob();
-            ////VERIFICA SI HAY BOLETOS DUPLICADOS POR WEB
-            //if (_CsBoletosWeb.ListaBoletosAnuladosWebJob().Count() > 0)
-            //{
-            //    Scheduler sc = new Scheduler();
-            //    sc.Start();
-            //}
-        }
+		// Evento que se ejecuta cuando el usuario intenta cerrar el formulario
+		private void FrmEmail_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// Impedir que el formulario se cierre pulsando la X o Alt + F4
+			switch (e.CloseReason)
+			{
+				case CloseReason.UserClosing:
+					e.Cancel = true; // Cancela el cierre, mantiene el form en ejecución
+					break;
+			}
+		}
 
-        private void Ejecutar()
-        {
-            //DateTime date = dateTimePicker1.Value;
-            
-            Scheduler sc = new Scheduler();
-            sc.Start();
-        }
+		// Botón "Ejecutar" (comentado porque ahora se llama Ejecutar() directo en Load)
+		private void BtnEjecutar_Click(object sender, EventArgs e)
+		{
+			
+		}
 
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    DateTime date = dateTimePicker1.Value;
-        //    Scheduler sc = new Scheduler();
-        //    sc.Start();
-        //    MessageBox.Show(dateTimePicker1.Value.ToString());
-        //}
-    }
+		// Método que arranca el Scheduler
+		private void Ejecutar()
+		{
+			//DateTime date = dateTimePicker1.Value; // Posible futura personalización con DateTimePicker (comentado)
+
+			Scheduler sc = new Scheduler(); // Crea instancia del programador Quartz
+			sc.Start(); // Arranca el scheduler (ejecutará el Job programado)
+		}
+	}
 }
