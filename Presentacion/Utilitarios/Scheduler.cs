@@ -5,9 +5,6 @@ namespace Presentacion.Utilitarios
 {
 	public class Scheduler
 	{
-		////CsBoletosWeb _CsBoletosWeb = new CsBoletosWeb();
-		// Comentado, probablemente era para hacer pruebas directas desde aquí
-
 		// Método Start: inicia un scheduler que ejecuta el Job cada 59 minutos
 		public void Start()
 		{
@@ -70,6 +67,61 @@ namespace Presentacion.Utilitarios
 
 			// Arranca el scheduler
 			scheduler.Start();
+		}
+
+
+		/// <summary>
+		/// Configura y arranca el proceso automático de alertas por WhatsApp.
+		/// </summary>
+		public void StartNotificacionesWhatsApp()
+		{
+			// Obtiene una instancia del motor de Quartz (Scheduler)
+			IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+
+			// Si el motor no ha arrancado (por ejemplo, al abrir la app), lo inicia
+			if (!scheduler.IsStarted) scheduler.Start();
+
+			// Definición del Job: Le indica a Quartz que debe ejecutar la clase 'JobPolizas'
+			IJobDetail job = JobBuilder.Create<JobPolizas>()
+								.WithIdentity("JobWhatsApp", "GrupoAlertas") // Nombre único para identificar el proceso
+								.Build();
+
+			// Trigger con Cron Schedule: Permite una programación muy precisa.
+			// Formato: "segundos minutos horas díaMes mes díaSemana"
+			ITrigger trigger = TriggerBuilder.Create()
+								.WithIdentity("TriggerWhatsApp", "GrupoAlertas")
+								.WithCronSchedule("0 0 9 * * ?") // Se dispara EXACTAMENTE a las 09:00:00 AM todos los días
+								.Build();
+
+			// Registra el Job y el Trigger en el motor de Quartz
+			scheduler.ScheduleJob(job, trigger);
+		}
+
+		/// <summary>
+		/// Configura y arranca el proceso automático de reportes por Correo Electrónico.
+		/// </summary>
+		public void StartCorreoCada4Horas()
+		{
+			// Obtiene o reutiliza el scheduler por defecto
+			IScheduler scheduler = StdSchedulerFactory.GetDefaultScheduler();
+			if (!scheduler.IsStarted) scheduler.Start();
+
+			// Definición del Job: Apunta a la clase 'JobCorreoPolizas' encargada de armar el HTML del mail
+			IJobDetail job = JobBuilder.Create<JobCorreoPolizas>()
+								.WithIdentity("JobCorreo", "GrupoMailing")
+								.Build();
+
+			// Trigger de Intervalo Simple: Ideal para tareas recurrentes frecuentes.
+			ITrigger trigger = TriggerBuilder.Create()
+								.WithIdentity("TriggerCorreo", "GrupoMailing")
+								.StartNow() // Se ejecuta por PRIMERA VEZ apenas se abre la aplicación
+								.WithSimpleSchedule(x => x
+									.WithIntervalInHours(4)     // Define la frecuencia de repetición (4 horas)
+									.RepeatForever())           // No tiene fecha de finalización
+								.Build();
+
+			// Registra el proceso de correo en el motor
+			scheduler.ScheduleJob(job, trigger);
 		}
 
 	}

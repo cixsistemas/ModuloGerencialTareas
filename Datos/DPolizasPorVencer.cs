@@ -42,6 +42,7 @@ namespace Datos
                         int ordPlaca = SafeOrdinal(reader, "Placa");
                         int ordFechaVencimiento = SafeOrdinal(reader, "FechaVencimiento");
                         int ordNroPoliza = SafeOrdinal(reader, "NroPoliza");
+                        int ordTelefono = SafeOrdinal(reader, "Telefono");
 
                         // Recorremos los resultados fila por fila.
                         while (reader.Read())
@@ -55,7 +56,8 @@ namespace Datos
                                 // CORRECCIÓN TÉCNICA: Se lee como DateTime. Si es nulo, asignamos el valor mínimo de fecha.
                                 FechaVencimiento = reader.IsDBNull(ordFechaVencimiento) ? DateTime.MinValue : reader.GetDateTime(ordFechaVencimiento),
 
-                                NroPoliza = SafeGetString(reader, ordNroPoliza)
+                                NroPoliza = SafeGetString(reader, ordNroPoliza),
+                                Telefono = SafeGetString(reader, ordTelefono)
                             };
                             lista.Add(entidad);
                         }

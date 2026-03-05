@@ -6,8 +6,7 @@ using System.Windows.Forms;
 namespace Presentacion
 {
 	public partial class FrmProcesos : Form
-	{
-	
+	{	
 		public FrmProcesos()
 		{
 			InitializeComponent(); // Inicializa los componentes del formulario (botones, controles, etc.)
@@ -50,10 +49,16 @@ namespace Presentacion
 		// Método que arranca el Scheduler
 		private void Ejecutar()
 		{
-			//DateTime date = dateTimePicker1.Value; // Posible futura personalización con DateTimePicker (comentado)
+			Scheduler myScheduler = new Scheduler();
 
-			Scheduler sc = new Scheduler(); // Crea instancia del programador Quartz
-			sc.Start(); // Arranca el scheduler (ejecutará el Job programado)
+			// 1. WhatsApp (Diario 9 AM)
+			myScheduler.StartNotificacionesWhatsApp();
+
+			// 2. Correo (Cada 4 horas)
+			myScheduler.StartCorreoCada4Horas();
+
+			// 3. Clientes Duplicados (Como lo tenías antes)
+			myScheduler.Start1();
 		}
 	}
 }

@@ -96,5 +96,53 @@ namespace Presentacion.Utilitarios
 				}
 			}
 		}
+
+		public void EnviarCorreoPolizas(string asunto, string cuerpoHTML)
+		{
+			try
+			{
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+				// Leer configuraciones del app.config
+				string mailAddress = ConfigurationManager.AppSettings["MailAddress"];
+				string password = ConfigurationManager.AppSettings["Password"];
+				string host = ConfigurationManager.AppSettings["Host"];
+				// Nueva clave para los destinatarios
+				string toPolizas = ConfigurationManager.AppSettings["ToPolizas"];
+
+				if (string.IsNullOrEmpty(toPolizas)) return;
+
+				MailMessage mail = new MailMessage();
+				mail.From = new MailAddress(mailAddress, "Soporte Transportes Chiclayo");
+
+				// Separamos los correos por el punto y coma y los agregamos al "To"
+				string[] destinatarios = toPolizas.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+				foreach (var correo in destinatarios)
+				{
+					mail.To.Add(correo.Trim());
+				}
+
+				mail.Subject = asunto;
+				mail.Body = cuerpoHTML;
+				mail.IsBodyHtml = true;
+
+				SmtpClient smtp = new SmtpClient(host);
+				smtp.Port = 587;
+				smtp.Credentials = new NetworkCredential(mailAddress, password);
+				smtp.EnableSsl = true;
+
+				smtp.Send(mail);
+				System.Diagnostics.Debug.WriteLine("✅ Correo enviado a todos los destinatarios.");
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine("❌ Error enviando correo: " + ex.Message);
+				if (ex.InnerException != null)
+				{
+					System.Diagnostics.Debug.WriteLine("🔍 Detalle: " + ex.InnerException.Message);
+				}
+			}
+		}
+
 	}
 }

@@ -1,0 +1,105 @@
+﻿Para completar tu sistema, necesitamos el servidor en Node.js. Este actuará como el "traductor": 
+recibirá la petición HTTP desde tu código C# y usará la librería whatsapp-web.js para enviar el 
+mensaje real a través de tu teléfono.
+
+Aquí tienes el archivo server.js configurado paso a paso:
+
+1. Preparación del entorno
+Primero, en la carpeta donde vayas a tener este servidor, ejecuta estos comandos en tu terminal:
+
+Bash
+
+npm init -y
+npm install whatsapp-web.js qrcode-terminal express body-parser
+
+2. El código del server.js
+JavaScript
+
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = 3000; // El puerto que configuramos en tu C#
+
+// Middleware para entender los JSON que envía C#
+app.use(bodyParser.json());
+
+// Configuración del cliente de WhatsApp
+const client = new Client({
+    authStrategy: new LocalAuth(), // Guarda la sesión para no escanear el QR siempre
+    puppeteer: {
+        headless: true, // Ejecuta el navegador en segundo plano
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
+});
+
+// Generar el código QR en la consola para vincular el teléfono
+client.on('qr', (qr) => {
+    console.log('POR FAVOR ESCANEA EL SIGUIENTE CÓDIGO QR:');
+    qrcode.generate(qr, { small: true });
+});
+
+// Confirmar cuando el cliente esté listo
+client.on('ready', () => {
+    console.log('¡WhatsApp está conectado y listo!');
+});
+
+// ENDPOINT: Aquí es donde C# enviará la información
+app.post('/enviar-alerta', async (req, res) => {
+    try {
+        const { numero, mensaje } = req.body;
+
+        // Validar que lleguen los datos
+        if (!numero || !mensaje) {
+            return res.status(400).send({ error: 'Falta el número o el mensaje' });
+        }
+
+        // Formatear el ID de WhatsApp (ID de usuario + @c.us)
+        // El número debe venir con código de país (ej: 51999888777)
+        const chatId = numero.includes('@c.us') ? numero : `${numero}@c.us`;
+
+        // Enviar el mensaje
+        await client.sendMessage(chatId, mensaje);
+        
+        console.log(`✅ Mensaje enviado con éxito a: ${numero}`);
+        res.status(200).send({ status: 'Enviado correctamente' });
+
+    } catch (error) {
+        console.error('❌ Error al enviar mensaje:', error);
+        res.status(500).send({ error: 'Error interno al enviar el mensaje' });
+    }
+});
+
+// Iniciar el cliente de WhatsApp
+client.initialize();
+
+// Iniciar el servidor HTTP
+app.listen(port, () => {
+    console.log(`Servidor de API escuchando en http://localhost:${port}`);
+});
+
+
+3. Cómo ponerlo en marcha
+Ejecución: Abre una terminal en esa carpeta y escribe: node server.js.
+
+Vinculación: Aparecerá un código QR grande. Abre WhatsApp en tu celular -> Dispositivos vinculados -> 
+Vincular un dispositivo y escanea el QR.
+
+Persistencia: Gracias a LocalAuth(), se creará una carpeta llamada .wwebjs_auth. No la borres; es la que guarda 
+tu sesión para que la próxima vez el servidor se conecte solo.
+
+Consideraciones para tu servidor (Producción)
+Mantenerlo vivo: Como es una aplicación WinForms local, el server.js debe estar corriendo en la misma PC 
+(o en el servidor donde esté la base de datos). Puedes usar una herramienta llamada PM2 para que el script se 
+reinicie solo si falla:
+
+npm install -g pm2
+pm2 start server.js
+
+Seguridad: Al ser localhost, solo tu propia PC puede enviarle mensajes. Si planeas poner el servidor de Node 
+en otra computadora, deberás usar la IP de esa máquina en tu código C#.
+
+Bloqueos: Recuerda la pausa de 3 segundos que pusimos en C#. Es vital para que este server.js no intente enviar 
+100 mensajes en un segundo.

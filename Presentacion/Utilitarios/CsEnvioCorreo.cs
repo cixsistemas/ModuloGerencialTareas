@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Entidades;
+using Logica;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using Entidades;
-using Logica;
 
 namespace Presentacion.Utilitarios
 {
-    public class CsEnvioCorreo
+	public class CsEnvioCorreo
     {
         LBoletosWeb _LBoletosWeb = new LBoletosWeb();
 

@@ -80,5 +80,26 @@ namespace Presentacion
             //}
 
         }
-    }
+
+		private async void BtnWhatsApp_Click(object sender, EventArgs e)
+		{
+            // Datos de prueba exactos que me pasaste
+            string numeroPrueba = "51950567068";
+            string mensajePrueba = "*TEST DIRECTO*\nPlaca: F2E954\nEstado: Probando conexión.";
+
+            lblEstado.Text = "Enviando..."; // Pon un Label para ver qué pasa
+
+            WhatsappHelper ws = new WhatsappHelper();
+            bool resultado = await ws.EnviarAlertaPoliza(numeroPrueba, mensajePrueba);
+
+            if (resultado)
+            {
+                MessageBox.Show("✅ ¡El servidor de Node.js recibió la orden y envió el mensaje!");
+            }
+            else
+            {
+                MessageBox.Show("❌ Error: No se pudo conectar con Node.js o el número es inválido.");
+            }
+        }
+	}
 }
