@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="LBoletosWeb.cs" />
     <Compile Include="LClientesDuplicados.cs" />
+    <Compile Include="LPolizasPorVencer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

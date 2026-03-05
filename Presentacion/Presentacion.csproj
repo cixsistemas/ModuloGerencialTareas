@@ -62,11 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrmEmail.cs">
+    <Compile Include="FrmProcesos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmEmail.Designer.cs">
-      <DependentUpon>FrmEmail.cs</DependentUpon>
+    <Compile Include="FrmProcesos.Designer.cs">
+      <DependentUpon>FrmProcesos.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmPrueba.cs">
       <SubType>Form</SubType>
@@ -82,8 +82,8 @@
     <Compile Include="Utilitarios\Job.cs" />
     <Compile Include="Utilitarios\MailHelper.cs" />
     <Compile Include="Utilitarios\Scheduler.cs" />
-    <EmbeddedResource Include="FrmEmail.resx">
-      <DependentUpon>FrmEmail.cs</DependentUpon>
+    <EmbeddedResource Include="FrmProcesos.resx">
+      <DependentUpon>FrmProcesos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmPrueba.resx">
       <DependentUpon>FrmPrueba.cs</DependentUpon>

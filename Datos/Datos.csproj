@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DBoletosWeb.cs" />
     <Compile Include="DClientesDuplicados.cs" />
+    <Compile Include="DPolizasPorVencer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

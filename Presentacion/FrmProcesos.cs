@@ -5,10 +5,10 @@ using System.Windows.Forms;
 
 namespace Presentacion
 {
-	public partial class FrmEmail : Form
+	public partial class FrmProcesos : Form
 	{
 	
-		public FrmEmail()
+		public FrmProcesos()
 		{
 			InitializeComponent(); // Inicializa los componentes del formulario (botones, controles, etc.)
 		}

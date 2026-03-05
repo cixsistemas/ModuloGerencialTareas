@@ -38,12 +38,3 @@ namespace Presentacion.Utilitarios
 		}
 	}
 }
-
-
-//List<EBoletosWeb> lista = new List<EBoletosWeb>();
-//_CsBoletosWeb.ListaBoletosAnuladosWebJob();
-////VERIFICA SI HAY BOLETOS DUPLICADOS POR WEB
-//if (_CsBoletosWeb.ListaBoletosAnuladosWebJob().Count() > 0)
-//{
-//	_CsEnvioCorreo.EnviarMensaje("Boletos duplicados (Venta Web)", _CsBoletosWeb.ListaBoletosAnuladosWebJob());
-//}
